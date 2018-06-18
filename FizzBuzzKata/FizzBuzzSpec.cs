@@ -13,11 +13,11 @@ namespace FizzBuzzKata
         [DataRow(3, "Fizz")]
         [DataRow(4, "4")]
         [DataRow(5, "Buzz")]
-        [DataRow(7, "Pop")]
+        [DataRow(7, "Bang")]
         [DataRow(15, "FizzBuzz")]
-        [DataRow(21, "FizzPop")]
-        [DataRow(35, "BuzzPop")]
-        [DataRow(105, "FizzBuzzPop")]
+        [DataRow(21, "FizzBang")]
+        [DataRow(35, "BuzzBang")]
+        [DataRow(105, "FizzBuzzBang")]
         public void FizzBuzzCalculations(int number, string result)
         {
             Assert.AreEqual(result, new FizzBuzzConvertor().Convert(number));
@@ -30,7 +30,7 @@ namespace FizzBuzzKata
         {
             { 3, "Fizz"},
             { 5, "Buzz"},
-            { 7, "Pop"}
+            { 7, "Bang"}
         };
 
         public string Convert(int number)
