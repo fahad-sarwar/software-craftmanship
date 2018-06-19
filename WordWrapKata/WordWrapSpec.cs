@@ -10,10 +10,14 @@ namespace WordWrapKata
         [TestMethod]
         [DataRow("The", "The")]
         [DataRow("The boy", "The boy")]
+        [DataRow("Burning Burning", "Burning\nBurning")]
         [DataRow("The boy stood", "The boy\nstood")]
+        [DataRow("The boy stood on", "The boy\nstood on")]
         [DataRow("The boy stood on the burning deck", "The boy\nstood on\nthe\nburning\ndeck")]
         [DataRow("pneumonoultramicroscopicsilicovolcanoconiosis pneumonoultramicroscopicsilicovolcanoconiosis", "pneumonoultramicroscopicsilicovolcanoconiosis\npneumonoultramicroscopicsilicovolcanoconiosis")]
-        public void WrapText(string text, string result) => Assert.AreEqual(result, string.Join("\n", new WordWrapper(8).Process(text)));
+        [DataRow("I me you", "I me you")]
+        [DataRow("A B C D E F", "A B C D\nE F")]
+        public void WrapText(string text, string result) => Assert.AreEqual(result, new WordWrapper(8).Wrap(text));
     }
 
     public class WordWrapper
@@ -24,10 +28,10 @@ namespace WordWrapKata
         public WordWrapper(int threshold)
         {
             _threshold = threshold;
-            _result = new List<string>();
+            _result = new List<string> { string.Empty };
         }
 
-        public List<string> Process(string text)
+        public string Wrap(string text)
         {
             var words = text.Split(" ");
 
@@ -42,7 +46,7 @@ namespace WordWrapKata
                 UpdateLastItem(word);
             }
 
-            return _result;
+            return string.Join("\n", _result.Where(i => !string.IsNullOrWhiteSpace(i)));
         }
 
         private bool IsMoreThanThreshold(string value) => value.Trim().Length > _threshold;
@@ -59,10 +63,7 @@ namespace WordWrapKata
         {
             var lastItem = GetLastItem();
 
-            if (lastItem.Equals(new KeyValuePair<int, string>(0, string.Empty)))
-                _result.Add(value.Trim());
-            else
-                _result[lastItem.Key] = $"{lastItem.Value} {value}";
+            _result[lastItem.Key] = $"{lastItem.Value} {value}".Trim();
         }
     }
 }
