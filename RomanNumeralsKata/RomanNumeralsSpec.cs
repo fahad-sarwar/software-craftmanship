@@ -58,7 +58,7 @@ namespace RomanNumeralsKata
 
             var result = LookupConversion(number);
 
-            return LookupConversion(number).Value + Convert(number - result.Key);
+            return string.Join("", result.Value, Convert(number - result.Key));
         }
 
         private KeyValuePair<int, string> LookupConversion(int number) => _lookup.First(n => n.Key <= number);
