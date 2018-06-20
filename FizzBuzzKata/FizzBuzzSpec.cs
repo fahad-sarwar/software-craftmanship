@@ -18,10 +18,7 @@ namespace FizzBuzzKata
         [DataRow(21, "FizzBang")]
         [DataRow(35, "BuzzBang")]
         [DataRow(105, "FizzBuzzBang")]
-        public void FizzBuzzCalculations(int number, string result)
-        {
-            Assert.AreEqual(result, new FizzBuzzConvertor().Convert(number));
-        }
+        public void FizzBuzzCalculations(int number, string result) => Assert.AreEqual(result, new FizzBuzzConvertor().Convert(number));
     }
 
     public class FizzBuzzConvertor
