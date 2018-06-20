@@ -28,6 +28,7 @@ namespace RomanNumeralsKata
         [DataRow(49, "XLIX")]
         [DataRow(99, "XCIX")]
         [DataRow(100, "C")]
+        [DataRow(490, "CDXC")]
         public void RomanNumeralsConverter(int number, string romanNumeral) =>
             Assert.AreEqual(romanNumeral, new RomanNumeralCalculator().Convert(number));
     }
@@ -38,8 +39,8 @@ namespace RomanNumeralsKata
         {
             //{ 1000, "M"},
             //{ 900, "CM"},
-            //{ 500, "D"},
-            //{ 400, "CD"},
+            { 500, "D"},
+            { 400, "CD"},
             { 100, "C"},
             { 90, "XC"},
             { 50, "L"},
@@ -48,8 +49,7 @@ namespace RomanNumeralsKata
             { 9, "IX"},
             { 5, "V"},
             { 4, "IV"},
-            { 1, "I" },
-            { 0, "" }
+            { 1, "I" }
         };
 
         public string Convert(int number)
