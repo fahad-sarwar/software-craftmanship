@@ -29,10 +29,10 @@ namespace RomanNumeralsKata
         [DataRow(99, "XCIX")]
         [DataRow(100, "C")]
         public void RomanNumeralsConverter(int number, string romanNumeral) =>
-            Assert.AreEqual(romanNumeral, new RomanNumeralConverter().Convert(number));
+            Assert.AreEqual(romanNumeral, new RomanNumeralCalculator().Convert(number));
     }
 
-    public class RomanNumeralConverter
+    public class RomanNumeralCalculator
     {
         private readonly Dictionary<int, string> _lookup = new Dictionary<int, string>
         {
