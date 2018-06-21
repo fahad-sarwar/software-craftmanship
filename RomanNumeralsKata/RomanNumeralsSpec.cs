@@ -62,5 +62,20 @@ namespace RomanNumeralsKata
         }
 
         private KeyValuePair<int, string> LookupConversion(int number) => _lookup.First(n => n.Key <= number);
+
+        //public string Convert(int number)
+        //{
+        //    var romanNumberal = string.Empty;
+
+        //    while (number > 0)
+        //    {
+        //        var result = LookupConversion(number);
+
+        //        romanNumberal += result.Value;
+        //        number -= result.Key;
+        //    }
+
+        //    return romanNumberal;
+        //}
     }
 }
