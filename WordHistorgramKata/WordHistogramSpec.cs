@@ -32,22 +32,14 @@ namespace WordHistorgramKata
     {
         public static Dictionary<string, int> Calculate(string text)
         {
-            text = RemoveUnwantedCharacters(text);
-
-            var result = text.Split(" ")
-                .Where(word => !string.IsNullOrWhiteSpace(word))
-                .GroupBy(word => word)
-                .ToDictionary(gbd => gbd.Key, gbc => gbc.Count());
-
-            return result;
-        }
-
-        private static string RemoveUnwantedCharacters(string text)
-        {
             return text
                 .Replace("\n", " ")
                 .Replace(".", " ")
-                .Replace(",", " ");
+                .Replace(",", " ")
+                .Split(" ")
+                .Where(word => !string.IsNullOrWhiteSpace(word))
+                .GroupBy(word => word)
+                .ToDictionary(gbd => gbd.Key, gbc => gbc.Count());
         }
     }
 }
