@@ -157,14 +157,14 @@ namespace LinkedListKata
 
     public class LinkedList
     {
-        private string _item;
+        private Item _item;
 
         public int Count()
         {
-            if (!string.IsNullOrWhiteSpace(_item))
-                return 1;
+            if (_item == null)
+                return 0;
 
-            return 0;
+            return 1;
         }
 
         public string Get(int index)
@@ -174,15 +174,16 @@ namespace LinkedListKata
 
         public void Add(string value)
         {
-            _item = value;
-            //_item = new Item(value);
+            _item = new Item(value);
         }
     }
 
-    //public class Item
-    //{
-    //    private readonly string _value;
+    public class Item
+    {
+        private readonly string _value;
 
-    //    public Item(string value) => _value = value;
-    //}
+        public Item(string value) => _value = value;
+
+        public string GetValue() => _value;
+    }
 }
