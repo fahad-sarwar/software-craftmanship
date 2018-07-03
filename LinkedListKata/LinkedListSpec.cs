@@ -51,10 +51,20 @@ namespace LinkedListKata
         [TestClass]
         public class WhenTheLinkedListHasOneItem
         {
-            //[TestMethod]
-            //public void The_item_count_is_one()
-            //{
-            //}
+            private LinkedList _linkedList;
+
+            [TestInitialize]
+            public void Setup()
+            {
+                _linkedList = new LinkedList();
+                _linkedList.Add("One");
+            }
+
+            [TestMethod]
+            public void The_item_count_is_one()
+            {
+                Assert.AreEqual(1, _linkedList.Count());
+            }
 
             //[TestMethod]
             //public void The_item_can_be_retrieved_by_its_index()
@@ -147,8 +157,13 @@ namespace LinkedListKata
 
     public class LinkedList
     {
+        private string _item;
+
         public int Count()
         {
+            if (!string.IsNullOrWhiteSpace(_item))
+                return 1;
+
             return 0;
         }
 
@@ -156,5 +171,18 @@ namespace LinkedListKata
         {
             throw new IndexOutOfRangeException();
         }
+
+        public void Add(string value)
+        {
+            _item = value;
+            //_item = new Item(value);
+        }
     }
+
+    //public class Item
+    //{
+    //    private readonly string _value;
+
+    //    public Item(string value) => _value = value;
+    //}
 }
