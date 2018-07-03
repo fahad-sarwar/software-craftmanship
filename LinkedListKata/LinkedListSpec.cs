@@ -1,3 +1,4 @@
+using System;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 
 namespace LinkedListKata
@@ -38,11 +39,12 @@ namespace LinkedListKata
             //{
             //}
 
-            //[TestMethod]
-            //[ExpectedException(typeof(IndexOutOfRangeException))]
-            //public void Retrieving_an_item_by_index_results_in_an_exception()
-            //{
-            //}
+            [TestMethod]
+            [ExpectedException(typeof(IndexOutOfRangeException))]
+            public void Retrieving_an_item_by_index_results_in_an_exception()
+            {
+                _linkedList.Get(0);
+            }
 
         }
 
@@ -148,6 +150,11 @@ namespace LinkedListKata
         public int Count()
         {
             return 0;
+        }
+
+        public string Get(int index)
+        {
+            throw new IndexOutOfRangeException();
         }
     }
 }
