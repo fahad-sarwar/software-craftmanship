@@ -66,14 +66,16 @@ namespace LinkedListKata
                 Assert.AreEqual(1, _linkedList.Count());
             }
 
-            //[TestMethod]
-            //public void The_item_can_be_retrieved_by_its_index()
-            //{
-            //}
+            [TestMethod]
+            public void The_item_can_be_retrieved_by_its_index()
+            {
+                Assert.AreEqual("One", _linkedList.Get(0));
+            }
 
             //[TestMethod]
             //public void The_index_can_be_retrieved_for_the_item()
             //{
+            //    Assert.AreEqual(0, _linkedList.IndexOf("One"));
             //}
 
             //[TestMethod]
@@ -161,7 +163,7 @@ namespace LinkedListKata
 
         public int Count()
         {
-            if (_item == null)
+            if (IsEmpty())
                 return 0;
 
             return 1;
@@ -169,13 +171,18 @@ namespace LinkedListKata
 
         public string Get(int index)
         {
-            throw new IndexOutOfRangeException();
+            if (IsEmpty())
+                throw new IndexOutOfRangeException();
+
+            return _item.GetValue();
         }
 
         public void Add(string value)
         {
             _item = new Item(value);
         }
+
+        private bool IsEmpty() => _item == null;
     }
 
     public class Item
