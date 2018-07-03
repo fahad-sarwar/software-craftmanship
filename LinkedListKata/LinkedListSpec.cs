@@ -19,9 +19,18 @@ namespace LinkedListKata
         [TestClass]
         public class WhenTheLinkedListIsEmpty
         {
+            private LinkedList _linkedList;
+
+            [TestInitialize]
+            public void Setup()
+            {
+                _linkedList = new LinkedList();
+            }
+
             [TestMethod]
             public void The_item_count_is_empty()
             {
+                Assert.AreEqual(0, _linkedList.Count());
             }
 
             //[TestMethod]
@@ -131,6 +140,14 @@ namespace LinkedListKata
 
             //    public override bool Equals(object obj) => obj is DummyClass other && other._id == _id && other._name == _name;
             //}
+        }
+    }
+
+    public class LinkedList
+    {
+        public int Count()
+        {
+            return 0;
         }
     }
 }
