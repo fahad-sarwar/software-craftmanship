@@ -8,12 +8,12 @@ namespace LinkedListKata
         // Test-drive your own implementation of a linked list, WITHOUT using arrays or any standard libarary classes.
 
         // It should be possible to:
-        // - Find the index of any object in the list
+        // - Find the index of any object in the list - DONE
         // - Add/remove objects at any point in the list
         // - Directly access any objects in the list by giving its index
 
         // For extra bonus points:
-        // - Use generics to allow the list to contain any type of object
+        // - Use generics to allow the list to contain any type of object - DONE
         // - Implement your solution without using conditionals
         // - Allow the list to be searched and filtered using some kind of matcher on the objects it contains
 
@@ -131,20 +131,53 @@ namespace LinkedListKata
                 _linkedList.Add("Three");
             }
 
-            //[TestMethod]
-            //public void Can_add_an_item_to_the_start_of_the_list()
-            //{
-            //}
+            [TestMethod]
+            public void Can_add_an_item_to_the_start_of_the_list()
+            {
+                _linkedList.Insert(0, "Start");
 
-            //[TestMethod]
-            //public void Can_add_an_item_to_the_end_of_the_list()
-            //{
-            //}
+                Assert.AreEqual(4, _linkedList.Count());
+                Assert.AreEqual("Start", _linkedList.Get(0));
+                Assert.AreEqual("One", _linkedList.Get(1));
+                Assert.AreEqual("Two", _linkedList.Get(2));
+                Assert.AreEqual("Three", _linkedList.Get(3));
+                Assert.AreEqual(0, _linkedList.IndexOf("Start"));
+                Assert.AreEqual(1, _linkedList.IndexOf("One"));
+                Assert.AreEqual(2, _linkedList.IndexOf("Two"));
+                Assert.AreEqual(3, _linkedList.IndexOf("Three"));
+            }
 
-            //[TestMethod]
-            //public void Can_add_an_item_to_the_middle_of_the_list()
-            //{
-            //}
+            [TestMethod]
+            public void Can_add_an_item_to_the_end_of_the_list()
+            {
+                _linkedList.Insert(3, "End");
+
+                Assert.AreEqual(4, _linkedList.Count());
+                Assert.AreEqual("One", _linkedList.Get(0));
+                Assert.AreEqual("Two", _linkedList.Get(1));
+                Assert.AreEqual("Three", _linkedList.Get(2));
+                Assert.AreEqual("End", _linkedList.Get(3));
+                Assert.AreEqual(0, _linkedList.IndexOf("One"));
+                Assert.AreEqual(1, _linkedList.IndexOf("Two"));
+                Assert.AreEqual(2, _linkedList.IndexOf("Three"));
+                Assert.AreEqual(3, _linkedList.IndexOf("End"));
+            }
+
+            [TestMethod]
+            public void Can_add_an_item_to_the_middle_of_the_list()
+            {
+                _linkedList.Insert(2, "Middle");
+
+                Assert.AreEqual(4, _linkedList.Count());
+                Assert.AreEqual("One", _linkedList.Get(0));
+                Assert.AreEqual("Two", _linkedList.Get(1));
+                Assert.AreEqual("Middle", _linkedList.Get(2));
+                Assert.AreEqual("Three", _linkedList.Get(3));
+                Assert.AreEqual(0, _linkedList.IndexOf("One"));
+                Assert.AreEqual(1, _linkedList.IndexOf("Two"));
+                Assert.AreEqual(2, _linkedList.IndexOf("Middle"));
+                Assert.AreEqual(3, _linkedList.IndexOf("Three"));
+            }
         }
 
         [TestClass]
@@ -208,7 +241,7 @@ namespace LinkedListKata
         {
             var count = 0;
 
-            TraverseItems((item, index) => count++);
+            Iterate((currentItem, currentIndex) => count++);
 
             return count;
         }
@@ -217,10 +250,10 @@ namespace LinkedListKata
         {
             Item<T> foundItem = null;
 
-            TraverseItems((item, index) =>
+            Iterate((currentItem, currentIndex) =>
             {
-                if (index == value)
-                    foundItem = item;
+                if (currentIndex == value)
+                    foundItem = currentItem;
             });
 
             if (foundItem == null) throw new IndexOutOfRangeException();
@@ -232,10 +265,10 @@ namespace LinkedListKata
         {
             var foundIndex = -1;
 
-            TraverseItems((item, index) =>
+            Iterate((currentItem, currentIndex) =>
             {
-                if (item.GetValue().Equals(value))
-                    foundIndex = index;
+                if (currentItem.GetValue().Equals(value))
+                    foundIndex = currentIndex;
             });
 
             return foundIndex;
@@ -249,18 +282,42 @@ namespace LinkedListKata
                 return;
             }
 
-            TraverseItems((item, index) =>
+            Iterate((currentItem, currentIndex) =>
             {
-                if(item.IsLast())
-                    item.SetNextItem(Item<T>.From(value));
+                if(currentItem.IsLast())
+                    currentItem.SetNextItem(Item<T>.From(value));
             });
         }
 
-        public void Insert(int index, T item) { }
+        public void Insert(int index, T value)
+        {
+            Item<T> previousItem = null;
+            var newItem = Item<T>.From(value);
+
+            Iterate((currentItem, currentIndex) =>
+            {
+                if (currentIndex == index - 1)
+                    previousItem = currentItem;
+            });
+
+            if (previousItem == null)
+            {
+                newItem.SetNextItem(_firstItem);
+                _firstItem = newItem;
+            }
+            else
+            {
+                if (!previousItem.IsLast())
+                    newItem.SetNextItem(previousItem.Next());
+
+                previousItem.SetNextItem(newItem);
+            }
+        }
+
         private void Remove(T item) { }
         private void RemoveAt(int index) { }
 
-        private void TraverseItems(Action<Item<T>, int> onNext)
+        private void Iterate(Action<Item<T>, int> onNextItem)
         {
             var currentItem = _firstItem;
             var currentIndex = 0;
@@ -269,7 +326,7 @@ namespace LinkedListKata
             {
                 var isLast = currentItem.IsLast();
 
-                onNext(currentItem, currentIndex);
+                onNextItem(currentItem, currentIndex);
 
                 if (isLast) break;
 
@@ -298,6 +355,8 @@ namespace LinkedListKata
         public Item<T> Next() => _nextItem;
 
         public void SetNextItem(Item<T> item) => _nextItem = item;
+
+        public override string ToString() => _value.ToString();
 
         public static Item<T> From(T value) => new Item<T>(value);
     }
