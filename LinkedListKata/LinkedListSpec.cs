@@ -9,8 +9,8 @@ namespace LinkedListKata
 
         // It should be possible to:
         // - Find the index of any object in the list - DONE
-        // - Add/remove objects at any point in the list
-        // - Directly access any objects in the list by giving its index
+        // - Add/remove objects at any point in the list - DONE
+        // - Directly access any objects in the list by giving its index - DONE
 
         // For extra bonus points:
         // - Use generics to allow the list to contain any type of object - DONE
@@ -18,11 +18,11 @@ namespace LinkedListKata
         // - Allow the list to be searched and filtered using some kind of matcher on the objects it contains
 
         // List<T> someList = new List();
-        // someList.Add(x)        // Adds x to the end of the list
-        // someList.Insert(0, x)  // Adds x at the given index
-        // someList.Remove(x)     // Removes the first x observed
-        // someList.RemoveAt(0)   // Removes the item at the given index
-        // someList.Count()       // Always good to know how many elements you have!
+        // someList.Add(x)        // Adds x to the end of the list - DONE
+        // someList.Insert(0, x)  // Adds x at the given index - DONE
+        // someList.Remove(x)     // Removes the first x observed - DONE
+        // someList.RemoveAt(0)   // Removes the item at the given index - DONE
+        // someList.Count()       // Always good to know how many elements you have! - DONE
 
         [TestClass]
         public class WhenTheLinkedListIsEmpty
@@ -181,6 +181,81 @@ namespace LinkedListKata
         }
 
         [TestClass]
+        public class WhenRemovingItemsFromTheLinkedList
+        {
+            private LinkedList<string> _linkedList;
+
+            [TestInitialize]
+            public void Setup()
+            {
+                _linkedList = new LinkedList<string>();
+                _linkedList.Add("One");
+                _linkedList.Add("Two");
+                _linkedList.Add("Three");
+            }
+
+            [TestMethod]
+            public void Can_remove_an_item_from_the_start_of_the_list_using_the_item()
+            {
+                _linkedList.Remove("One");
+
+                Assert.AreEqual(2, _linkedList.Count());
+                Assert.AreEqual("Two", _linkedList.Get(0));
+                Assert.AreEqual("Three", _linkedList.Get(1));
+            }
+
+            [TestMethod]
+            public void Can_remove_an_item_from_the_middle_of_the_list_using_the_item()
+            {
+                _linkedList.Remove("Two");
+
+                Assert.AreEqual(2, _linkedList.Count());
+                Assert.AreEqual("One", _linkedList.Get(0));
+                Assert.AreEqual("Three", _linkedList.Get(1));
+            }
+
+            [TestMethod]
+            public void Can_remove_an_item_from_the_end_of_the_list_using_the_item()
+            {
+                _linkedList.Remove("Three");
+
+                Assert.AreEqual(2, _linkedList.Count());
+                Assert.AreEqual("One", _linkedList.Get(0));
+                Assert.AreEqual("Two", _linkedList.Get(1));
+            }
+
+            [TestMethod]
+            public void Can_remove_an_item_from_the_start_of_the_list_using_its_index()
+            {
+                _linkedList.RemoveAt(0);
+
+                Assert.AreEqual(2, _linkedList.Count());
+                Assert.AreEqual("Two", _linkedList.Get(0));
+                Assert.AreEqual("Three", _linkedList.Get(1));
+            }
+
+            [TestMethod]
+            public void Can_remove_an_item_from_the_middle_of_the_list_using_its_index()
+            {
+                _linkedList.RemoveAt(1);
+
+                Assert.AreEqual(2, _linkedList.Count());
+                Assert.AreEqual("One", _linkedList.Get(0));
+                Assert.AreEqual("Three", _linkedList.Get(1));
+            }
+
+            [TestMethod]
+            public void Can_remove_an_item_from_the_end_of_the_list_using_its_index()
+            {
+                _linkedList.RemoveAt(2);
+
+                Assert.AreEqual(2, _linkedList.Count());
+                Assert.AreEqual("One", _linkedList.Get(0));
+                Assert.AreEqual("Two", _linkedList.Get(1));
+            }
+        }
+
+        [TestClass]
         public class TheLinkedListSupportsMultipleTypes
         {
             [TestMethod]
@@ -294,28 +369,57 @@ namespace LinkedListKata
             Item<T> previousItem = null;
             var newItem = Item<T>.From(value);
 
+            if (index == 0)
+            {
+                newItem.SetNextItem(_firstItem);
+                _firstItem = newItem;
+                return;
+            }
+
             Iterate((currentItem, currentIndex) =>
             {
                 if (currentIndex == index - 1)
                     previousItem = currentItem;
             });
 
-            if (previousItem == null)
-            {
-                newItem.SetNextItem(_firstItem);
-                _firstItem = newItem;
-            }
-            else
-            {
-                if (!previousItem.IsLast())
-                    newItem.SetNextItem(previousItem.Next());
+            if (!previousItem.IsLast())
+                newItem.SetNextItem(previousItem.Next());
 
-                previousItem.SetNextItem(newItem);
-            }
+            previousItem.SetNextItem(newItem);
         }
 
-        private void Remove(T item) { }
-        private void RemoveAt(int index) { }
+        public void Remove(T item)
+        {
+            var foundIndex = -1;
+
+            Iterate((currentItem, currentIndex) =>
+            {
+                if (currentItem.GetValue().Equals(item))
+                    foundIndex = currentIndex;
+            });
+
+            RemoveAt(foundIndex);
+        }
+
+        public void RemoveAt(int index)
+        {
+            if (index == 0)
+            {
+                _firstItem = _firstItem.Next();
+                return;
+            }
+
+            Item<T> previousItem = null;
+            Item<T> specifiedItem = null;
+
+            Iterate((currentItem, currentIndex) =>
+            {
+                if (currentIndex == index) specifiedItem = currentItem;
+                if (currentIndex == index - 1) previousItem = currentItem;
+            });
+
+            previousItem.SetNextItem(specifiedItem.Next());
+        }
 
         private void Iterate(Action<Item<T>, int> onNextItem)
         {
