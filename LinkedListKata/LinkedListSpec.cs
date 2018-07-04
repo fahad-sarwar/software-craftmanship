@@ -6,7 +6,7 @@ namespace LinkedListKata
     public class LinkedListSpec
     {
         // Test-drive your own implementation of a linked list, WITHOUT using arrays or any standard libarary classes.
-        
+
         // It should be possible to:
         // - Find the index of any object in the list
         // - Add/remove objects at any point in the list
@@ -17,15 +17,22 @@ namespace LinkedListKata
         // - Implement your solution without using conditionals
         // - Allow the list to be searched and filtered using some kind of matcher on the objects it contains
 
+        // List<T> someList = new List();
+        // someList.Add(x)        // Adds x to the end of the list
+        // someList.Insert(0, x)  // Adds x at the given index
+        // someList.Remove(x)     // Removes the first x observed
+        // someList.RemoveAt(0)   // Removes the item at the given index
+        // someList.Count()       // Always good to know how many elements you have!
+
         [TestClass]
         public class WhenTheLinkedListIsEmpty
         {
-            private LinkedList _linkedList;
+            private LinkedList<string> _linkedList;
 
             [TestInitialize]
             public void Setup()
             {
-                _linkedList = new LinkedList();
+                _linkedList = new LinkedList<string>();
             }
 
             [TestMethod]
@@ -34,29 +41,23 @@ namespace LinkedListKata
                 Assert.AreEqual(0, _linkedList.Count());
             }
 
-            //[TestMethod]
-            //public void The_item_count_is_zero()
-            //{
-            //}
-
             [TestMethod]
             [ExpectedException(typeof(IndexOutOfRangeException))]
             public void Retrieving_an_item_by_index_results_in_an_exception()
             {
                 _linkedList.Get(0);
             }
-
         }
 
         [TestClass]
         public class WhenTheLinkedListHasOneItem
         {
-            private LinkedList _linkedList;
+            private LinkedList<string> _linkedList;
 
             [TestInitialize]
             public void Setup()
             {
-                _linkedList = new LinkedList();
+                _linkedList = new LinkedList<string>();
                 _linkedList.Add("One");
             }
 
@@ -72,35 +73,63 @@ namespace LinkedListKata
                 Assert.AreEqual("One", _linkedList.Get(0));
             }
 
-            //[TestMethod]
-            //public void The_index_can_be_retrieved_for_the_item()
-            //{
-            //    Assert.AreEqual(0, _linkedList.IndexOf("One"));
-            //}
-
-            //[TestMethod]
-            //public void The_list_is_not_empty()
-            //{
-            //}
+            [TestMethod]
+            public void The_index_can_be_retrieved_for_the_item()
+            {
+                Assert.AreEqual(0, _linkedList.IndexOf("One"));
+            }
         }
 
         [TestClass]
-        public class WhenTheLinkedListHasMultipleItems
+        public class WhenAddingMultipleItemsToTheLinkedList
         {
-            //[TestMethod]
-            //public void The_item_count_reflects_this()
-            //{
-            //}
+            private LinkedList<string> _linkedList;
 
-            //[TestMethod]
-            //public void The_items_can_be_retrieved_by_their_indexes()
-            //{
-            //}
+            [TestInitialize]
+            public void Setup()
+            {
+                _linkedList = new LinkedList<string>();
+                _linkedList.Add("One");
+                _linkedList.Add("Two");
+                _linkedList.Add("Three");
+            }
 
-            //[TestMethod]
-            //public void The_indexes_can_be_retrieved_for_the_items()
-            //{
-            //}
+            [TestMethod]
+            public void The_item_count_reflects_this()
+            {
+                Assert.AreEqual(3, _linkedList.Count());
+            }
+
+            [TestMethod]
+            public void The_items_can_be_retrieved_by_their_indexes()
+            {
+                Assert.AreEqual("One", _linkedList.Get(0));
+                Assert.AreEqual("Two", _linkedList.Get(1));
+                Assert.AreEqual("Three", _linkedList.Get(2));
+            }
+
+            [TestMethod]
+            public void The_indexes_can_be_retrieved_for_the_items()
+            {
+                Assert.AreEqual(0, _linkedList.IndexOf("One"));
+                Assert.AreEqual(1, _linkedList.IndexOf("Two"));
+                Assert.AreEqual(2, _linkedList.IndexOf("Three"));
+            }
+        }
+
+        [TestClass]
+        public class WhenInsertingItemsAtVariousPositionsInTheLinkedList
+        {
+            private LinkedList<string> _linkedList;
+
+            [TestInitialize]
+            public void Setup()
+            {
+                _linkedList = new LinkedList<string>();
+                _linkedList.Add("One");
+                _linkedList.Add("Two");
+                _linkedList.Add("Three");
+            }
 
             //[TestMethod]
             //public void Can_add_an_item_to_the_start_of_the_list()
@@ -116,81 +145,160 @@ namespace LinkedListKata
             //public void Can_add_an_item_to_the_middle_of_the_list()
             //{
             //}
-
-            //[TestMethod]
-            //public void The_list_is_not_empty()
-            //{
-            //}
         }
 
         [TestClass]
         public class TheLinkedListSupportsMultipleTypes
         {
-            //[TestMethod]
-            //public void Int_is_supported()
-            //{
-            //}
+            [TestMethod]
+            public void Int_is_supported()
+            {
+                var linkedList = new LinkedList<int>();
+                linkedList.Add(1);
+                linkedList.Add(2);
 
-            //[TestMethod]
-            //public void String_is_supported()
-            //{
-            //}
+                Assert.AreEqual(2, linkedList.Count());
+                Assert.AreEqual(1, linkedList.Get(0));
+                Assert.AreEqual(2, linkedList.Get(1));
+            }
 
-            //[TestMethod]
-            //public void Complex_types_are_supported()
-            //{
-            //}
+            [TestMethod]
+            public void String_is_supported()
+            {
+                var linkedList = new LinkedList<string>();
+                linkedList.Add("One");
 
-            //public class DummyClass
-            //{
-            //    private readonly int _id;
-            //    private readonly string _name;
+                Assert.AreEqual(1, linkedList.Count());
+                Assert.AreEqual("One", linkedList.Get(0));
+            }
 
-            //    public DummyClass(int id, string name)
-            //    {
-            //        _id = id;
-            //        _name = name;
-            //    }
+            [TestMethod]
+            public void Complex_types_are_supported()
+            {
+                var linkedList = new LinkedList<Test>();
+                linkedList.Add(new Test("One", "Two"));
 
-            //    public override bool Equals(object obj) => obj is DummyClass other && other._id == _id && other._name == _name;
-            //}
+                Assert.AreEqual(1, linkedList.Count());
+                Assert.AreEqual(new Test("One", "Two"), linkedList.Get(0));
+            }
+
+            public class Test
+            {
+                private readonly string _valueOne;
+                private readonly string _valueTwo;
+
+                public Test(string valueOne, string valueTwo)
+                {
+                    _valueOne = valueOne;
+                    _valueTwo = valueTwo;
+                }
+
+                public override bool Equals(object obj) => obj is Test temp && temp._valueOne == _valueOne && temp._valueTwo == _valueTwo;
+
+                public override int GetHashCode() => _valueOne.GetHashCode() ^ _valueTwo.GetHashCode();
+            }
         }
     }
 
-    public class LinkedList
+    public class LinkedList<T>
     {
-        private Item _item;
+        private Item<T> _firstItem;
 
         public int Count()
         {
-            if (IsEmpty())
-                return 0;
+            var count = 0;
 
-            return 1;
+            TraverseItems((item, index) => count++);
+
+            return count;
         }
 
-        public string Get(int index)
+        public T Get(int value)
+        {
+            Item<T> foundItem = null;
+
+            TraverseItems((item, index) =>
+            {
+                if (index == value)
+                    foundItem = item;
+            });
+
+            if (foundItem == null) throw new IndexOutOfRangeException();
+
+            return foundItem.GetValue();
+        }
+
+        public int IndexOf(T value)
+        {
+            var foundIndex = -1;
+
+            TraverseItems((item, index) =>
+            {
+                if (item.GetValue().Equals(value))
+                    foundIndex = index;
+            });
+
+            return foundIndex;
+        }
+
+        public void Add(T value)
         {
             if (IsEmpty())
-                throw new IndexOutOfRangeException();
+            {
+                _firstItem = Item<T>.From(value);
+                return;
+            }
 
-            return _item.GetValue();
+            TraverseItems((item, index) =>
+            {
+                if(item.IsLast())
+                    item.SetNextItem(Item<T>.From(value));
+            });
         }
 
-        public void Add(string value)
+        public void Insert(int index, T item) { }
+        private void Remove(T item) { }
+        private void RemoveAt(int index) { }
+
+        private void TraverseItems(Action<Item<T>, int> onNext)
         {
-            _item = new Item(value);
+            var currentItem = _firstItem;
+            var currentIndex = 0;
+
+            while (currentItem != null)
+            {
+                var isLast = currentItem.IsLast();
+
+                onNext(currentItem, currentIndex);
+
+                if (isLast) break;
+
+                currentItem = currentItem.Next();
+                currentIndex++;
+            }
         }
 
-        private bool IsEmpty() => _item == null;
+        private bool IsEmpty() => _firstItem == null;
     }
 
-    public class Item
+    public class Item<T>
     {
-        private readonly string _value;
+        private readonly T _value;
+        private Item<T> _nextItem;
 
-        public Item(string value) => _value = value;
+        private Item(T value)
+        {
+            _value = value;
+        } 
 
-        public string GetValue() => _value;
+        public T GetValue() => _value;
+
+        public bool IsLast() => _nextItem == null;
+
+        public Item<T> Next() => _nextItem;
+
+        public void SetNextItem(Item<T> item) => _nextItem = item;
+
+        public static Item<T> From(T value) => new Item<T>(value);
     }
 }
