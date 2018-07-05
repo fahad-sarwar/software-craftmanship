@@ -3,7 +3,7 @@ using Microsoft.VisualStudio.TestTools.UnitTesting;
 namespace SupermarketCheckoutKata
 {
     [TestClass]
-    public class SupermarketCheckoutSpec
+    public class TddaiymiSupermarketCheckoutSpec
     {
         [TestMethod]
         public void ScanA_Returns50()
